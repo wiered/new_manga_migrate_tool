@@ -1,0 +1,1 @@
+{"sort":{"kind":"MATCH","dir":"DESC"},"filter":{"hidden_projects":[],"genres":{"excluded":[],"included":[]},"tags":{"excluded":[],"included":[]},"type":{"allowed":[]},"translation_status":{"allowed":[]},"released_year":{"min":null,"max":null},"require_chapters":true,"original_status":{"allowed":[]},"adult":{"allowed":[]}},"pagination":{"page":1,"size":32}}
