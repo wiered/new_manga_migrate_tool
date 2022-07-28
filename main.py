@@ -1,12 +1,12 @@
 from newmanga import add_multiple, add_multiple_crazy_method, add_multiple_lazy_method, get_name, add_manga
-from remanga import get_manga
 import keyboard
 import requests, json
 
-def main():
-    login = input("Input newmanga login: ")
-    password = input("Input newmanga password: ")
+login = input("Input newmanga login: ")
+password = input("Input newmanga password: ")
+from remanga import get_manga
 
+def main():
     login_url = 'https://api.newmanga.org/v2/login'
     login_payload = {
         'credentials': login,
