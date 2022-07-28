@@ -19,7 +19,7 @@ def main():
         print("Что-то пошло не так, попробуйте проверить правильность введённых данных")
         return None
     
-    reading_now, will_read, read, postponed, throw, not_interedted = get_manga()
+    reading_now, will_read, read, postponed, throw, not_interedted = get_manga() # Получение списков из решки
     
     print('Выберете пункт:')
     print("1 - Я хочу сам всё проверить\n    - Покажет вам всё что есть в виде:\n      Remanga name: {remanga name}\n      Newmanga name: {newmanga name}\n      По нажатию 'y' или 'enter' добавит в библиотеку, по нажатию любой другой клавиши - нет")
