@@ -55,7 +55,6 @@ def get_list(list, btn_xpath, xpath):
     
 
 def get_manga():
-    fin_manga_list = []
     driver.get("https://remanga.org/manga")
     driver.implicitly_wait(8)
 
