@@ -42,8 +42,6 @@ def main():
     manga_list = driver.find_element(By.XPATH, value = manga_list_xpath)
     manga_list = manga_list.text.split('\n')
     manga_list = manga_list[1:len(manga_list):2]
-    print(len(manga_list))
-    print(manga_list)
 
 def get_list(list, btn_xpath, xpath):
     btn = driver.find_element(By.XPATH, value = btn_xpath)
