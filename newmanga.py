@@ -1,6 +1,7 @@
 import requests
 import json
 import keyboard
+import time
 
 def main():
     """
@@ -136,6 +137,7 @@ def add_multiple_lazy_method(login_payload, manga_list, bookmark):
                     manga_url = 'https://api.newmanga.org/v2/projects/' + slug
                     r = session.post(manga_url + '/bookmark', json={'type':bookmark})
                     print(name)
+                    time.sleep(1)
 
 def add_multiple_crazy_method(login_payload, manga_list, bookmark): 
     """
@@ -161,6 +163,7 @@ def add_multiple_crazy_method(login_payload, manga_list, bookmark):
                 manga_url = 'https://api.newmanga.org/v2/projects/' + slug
                 r = session.post(manga_url + '/bookmark', json={'type':bookmark})
                 print(name)
+                time.sleep(1)
 
 if __name__ == '__main__':
     main()
