@@ -10,11 +10,11 @@ logger = logging.getLogger('WDM')
 logger.propagate = False
 logger.disabled = True
 
-import re
+import time
 
 CHROME_PATH = './chrome/chrome'
 CHROMEDRIVER_PATH = './chromedriver'
-WINDOW_SIZE = "1920,1080"
+WINDOW_SIZE = "1080,900"
 
 options = webdriver.ChromeOptions()
 #options.add_argument("--headless")
@@ -46,8 +46,24 @@ def main():
 def get_list(list, btn_xpath, xpath):
     btn = driver.find_element(By.XPATH, value = btn_xpath)
     btn.click()
-    print('Доскрольте до конца списка "{}" после чего нажмите Enter в консоли...'.format(list))
-    keyboard.wait('Enter')
+    #el = driver.find_element(By.LINK_TEXT, 'Пользовательское соглашение')
+    #driver.executeScript("window.scrollIntoView();", el)
+    #print('Доскрольте до конца списка "{}" после чего нажмите Enter в консоли...'.format(list))
+    #keyboard.wait('Enter')
+    last_height = driver.execute_script("return document.body.scrollHeight")
+
+    while True:
+        # Scroll down to bottom
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+        # Wait to load page
+        time.sleep(1)
+
+        # Calculate new scroll height and compare with last scroll height
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            break
+        last_height = new_height
     manga_list = driver.find_element(By.XPATH, value = xpath)
     manga_list = manga_list.text.split('\n')
     manga_list = manga_list[1:len(manga_list):2]
