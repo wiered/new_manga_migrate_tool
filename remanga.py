@@ -13,24 +13,10 @@ logger.disabled = True
 driver = None
 
 def main():
-    driver.get("https://remanga.org/manga")
-    driver.implicitly_wait(8)
-
-    print("Зайдите в свой аккаунт на сайте, после чего нажмите Enter в консоли...")
-    keyboard.wait('Enter')
-    user_btn_xpath = '//*[@id="app"]/header/div/button[2]/span[1]/span/div/img'
-    user_btn = driver.find_element(By.XPATH, value = user_btn_xpath)
-    user_btn.click()
-    user_btn_xpath = '//*[@id="menu-list"]/div/ul/li[1]/a'
-    user_btn = driver.find_element(By.XPATH, value = user_btn_xpath)
-    user_btn.click()
-
-    print('Доскрольте до конца списка "Читаю" после чего нажмите Enter в консоли...')
-    keyboard.wait('Enter')
-    manga_list_xpath = '//*[@id="app"]/div/div[2]/div[1]/div[2]/div/div[2]/div'
-    manga_list = driver.find_element(By.XPATH, value = manga_list_xpath)
-    manga_list = manga_list.text.split('\n')
-    manga_list = manga_list[1:len(manga_list):2]
+    """
+    --- Main
+    """
+    load_webdriver()
 
 def load_webdriver(headless: bool = False):
     global driver
@@ -57,15 +43,18 @@ def scroll_to_bottom():
             break
         last_height = new_height
 
+def click_button(xpath):
+    button = driver.find_element(By.XPATH, value = xpath)
+    button.click()
+
 def parse_catalogue(button):
     """
     --- Parsing manga catalogue form remanga
     """
     catalogue_xpath = '//*[@id="app"]/div/div[2]/div[1]/div[2]/div/div[2]/div'
-    button_xpath = '//*[@id="app"]/div/div[2]/div[1]/div[2]/div/div[1]/div[2]/div/button[' + button + ']'
-    button = driver.find_element(By.XPATH, value = button_xpath)
-    button.click()
+    click_button('//*[@id="app"]/div/div[2]/div[1]/div[2]/div/div[1]/div[2]/div/button[' + button + ']')
     scroll_to_bottom()
+
     parsed_catalogue = driver.find_element(By.XPATH, value = catalogue_xpath)
     parsed_catalogue = parsed_catalogue.text.split('\n')
     parsed_catalogue = parsed_catalogue[1:len(parsed_catalogue):2]
@@ -75,18 +64,14 @@ def get_manga():
     """
     --- Parsing manga catalogues form remanga account
     """
+    load_webdriver()
     driver.get("https://remanga.org/manga")
     driver.implicitly_wait(8)
     print("Зайдите в свой аккаунт на сайте, после чего нажмите Enter в консоли...")
     keyboard.wait('Enter')
 
-    button_xpath = '//*[@id="app"]/header/div/button[2]/span[1]/span/div/img'
-    button = driver.find_element(By.XPATH, value = button_xpath)
-    button.click()
-
-    button_xpath = '//*[@id="menu-list"]/div/ul/li[1]/a'
-    button = driver.find_element(By.XPATH, value = button_xpath)
-    button.click()
+    click_button('//*[@id="app"]/header/div/button[2]/span[1]/span/div/img')
+    click_button('//*[@id="menu-list"]/div/ul/li[1]/a')
 
     parsed_manga = [parse_catalogue(x) for x in range(1,7)]
     driver.close()
