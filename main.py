@@ -18,6 +18,8 @@ bookmarks = {
     6: "Не интересно"
 }
 
+__version__ = "v1.4.1"
+
 def get_login_payload():
     login = input("Input newmanga login: ")
     password = getpass("Input newmanga password (will be invisible): ")
@@ -44,12 +46,18 @@ def main():
 
     parser = ReMangaParser()
     parsed_manga = parser.get_manga() # Получение списков из решки
-    print(parsed_manga)
     bookmark = 1
+    print("\nAdding manga to your newmanga library! \nBe patient, please. It can take from 20 seconds to several minutes.\n")
+    errors = []
     with NewMangaParser(login_payload) as parser:
         for catalogue in tqdm(parsed_manga):
-            asyncio.run(parser.migrate_async(catalogue, bookmarks[bookmark]))
+            errors.append(asyncio.run(parser.migrate_async(catalogue, bookmarks[bookmark])))
             bookmark += 1
+
+    print()
+    for _errors in errors:
+        for error in _errors:
+            print("Error, not added: {}".format(*error))
 
 if __name__ == '__main__':
     main()

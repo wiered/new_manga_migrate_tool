@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait 
 from selenium.webdriver.support import expected_conditions as EC 
+from tqdm import tqdm
 from webdriver_manager.chrome import ChromeDriverManager
 import keyboard
 
@@ -56,7 +57,8 @@ class ReMangaParser:
         
         parsed_catalogue = []
 
-        for i in range(1, 7):
+        print("Scanning your manga catalogue")
+        for i in tqdm(range(1, 7)):
             self.click_button('//html/body/div[1]/main/div[2]/div/button/span')
             self.click_button(f'//html/body/div[2]/div/div/ul/li[{i}]')
             self.scroll_to_bottom()
@@ -87,6 +89,7 @@ class ReMangaParser:
         WebDriverWait(driver, 120).until( 
             EC.staleness_of(login_button)
         )
+        driver.minimize_window()
 
         self.click_button('//html/body/div/header/nav/div[3]/div[2]') # click account logo
         self.click_button('//html/body/div[2]/div/div/ul/li[1]/a') # click name

@@ -71,9 +71,7 @@ class NewMangaParser():
                     else:
                         errors.append((remanga_name, "No such manga on catalog i guess?"))
         
-        print()
-        for error in errors:
-            print("Error, not added:", *error)
+        return errors
 
 
     def __enter__(self):
