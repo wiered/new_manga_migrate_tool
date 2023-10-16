@@ -11,8 +11,8 @@ class NewMangaParser():
         self.login_url = 'https://api.newmanga.org/v2/login'
         self.search_url = 'https://neo.newmanga.org/catalogue'
 
-        file = open('data.json')
-        self.search_payload = json.load(file)
+        self.file = open('data.json')
+        self.search_payload = json.load(self.file)
         self.login_payload = login_payload
 
 
@@ -80,8 +80,8 @@ class NewMangaParser():
         return self
     
     
-    def __exit__(self):
-        pass
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.file.close()
 
 def main():
     """

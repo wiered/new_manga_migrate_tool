@@ -1,5 +1,7 @@
 import asyncio
 from getpass import getpass
+from time import sleep
+from sys import exit
 
 import requests, json
 from tqdm import tqdm
@@ -32,6 +34,8 @@ def check_credentials(login_payload):
 
     p = session.post(login_url, data=json.dumps(login_payload))
     if p.status_code != 200:
+        print("Неправильно введён логин или пароль")
+        sleep(5)
         raise Exception("Неправильно введён логин или пароль")
     
 def main():
@@ -49,3 +53,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    exit()
