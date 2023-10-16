@@ -12,70 +12,81 @@ logger.disabled = True
 
 driver = None
 
-def main():
-    """
-    --- Main
-    """
-    load_webdriver()
+class ReMangaParser:
+    def load_webdriver(self, headless: bool = False):
+        global driver
+        WINDOW_SIZE = "1080,900"
 
-def load_webdriver(headless: bool = False):
-    global driver
-    WINDOW_SIZE = "1080,900"
+        options = webdriver.ChromeOptions()
+        if headless:
+            options.add_argument("--headless")
+        options.add_argument("--log-level=3")
+        options.add_argument("--window-size=%s" % WINDOW_SIZE)
 
-    options = webdriver.ChromeOptions()
-    if headless:
-        options.add_argument("--headless")
-    options.add_argument("--log-level=3")
-    options.add_argument("--window-size=%s" % WINDOW_SIZE)
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-def scroll_to_bottom():
-    """
-    --- Scrolling down to bottom of the page
-    """
-    last_height = driver.execute_script("return document.body.scrollHeight")
-    while True:
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(1)
-        new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == last_height:
-            break
-        last_height = new_height
+    def scroll_to_bottom(self):
+        """
+        --- Scrolling down to bottom of the page
+        """
+        last_height = driver.execute_script("return document.body.scrollHeight")
+        while True:
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(1)
+            new_height = driver.execute_script("return document.body.scrollHeight")
+            if new_height == last_height:
+                break
+            last_height = new_height
 
-def click_button(xpath):
-    button = driver.find_element(By.XPATH, value = xpath)
-    button.click()
 
-def parse_catalogue(button):
-    """
-    --- Parsing manga catalogue form remanga
-    """
-    catalogue_xpath = '//*[@id="app"]/div/div[2]/div[1]/div[2]/div/div[2]/div'
-    click_button('//*[@id="app"]/div/div[2]/div[1]/div[2]/div/div[1]/div[2]/div/button[' + button + ']')
-    scroll_to_bottom()
+    def click_button(self, xpath):
+        button = driver.find_element(By.XPATH, value = xpath)
+        button.click()
 
-    parsed_catalogue = driver.find_element(By.XPATH, value = catalogue_xpath)
-    parsed_catalogue = parsed_catalogue.text.split('\n')
-    parsed_catalogue = parsed_catalogue[1:len(parsed_catalogue):2]
-    return parsed_catalogue
+
+    def parse_catalogue(self):
+        """
+        --- Parsing manga catalogue form remanga
+        """
+        catalogue_xpath = '//html/body/div/main/div[2]/div/div[2]'
+        self.click_button('//html/body/div/main/div[2]/div/div[1]/div[2]/div/button[2]')
+        
+        parsed_catalogue = []
+
+        for i in range(1, 7):
+            self.click_button('//html/body/div[1]/main/div[2]/div/button/span')
+            self.click_button(f'//html/body/div[2]/div/div/ul/li[{i}]')
+            self.scroll_to_bottom()
+
+            parsed = driver.find_element(By.XPATH, value = catalogue_xpath)
+            parsed = parsed.text.split('\n')
+            parsed_catalogue.append(parsed)
+            driver.execute_script("window.scrollTo(0, 0);")
+        
+        return parsed_catalogue
+
+
+    def get_manga(self):
+        """
+        --- Parsing manga catalogues form remanga account
+        """
+        self.load_webdriver()
+        driver.get("https://remanga.org/manga")
+        driver.implicitly_wait(8)
+        try:
+            self.click_button('//html/body/div[2]/div[3]/div/div/div[1]/button/span') # click phone app advertisement close button 
+        except:
+            print("No phone app ad")
+        self.click_button('//*[@id="__next"]/div/div/button') # click ok to cookies
+        self.click_button('//html/body/div/header/nav/div[3]/button') # click blue login button
+        print("Зайдите в свой аккаунт на сайте, после чего нажмите Enter в консоли...")
+        keyboard.wait('Enter')
+
+        self.click_button('//html/body/div/header/nav/div[3]/div[2]') # click account logo
+        self.click_button('//html/body/div[2]/div/div/ul/li[1]/a') # click name
+
+        parsed_manga = self.parse_catalogue()
+        driver.close()
+        return parsed_manga
     
-def get_manga():
-    """
-    --- Parsing manga catalogues form remanga account
-    """
-    load_webdriver()
-    driver.get("https://remanga.org/manga")
-    driver.implicitly_wait(8)
-    print("Зайдите в свой аккаунт на сайте, после чего нажмите Enter в консоли...")
-    keyboard.wait('Enter')
-
-    click_button('//*[@id="app"]/header/div/button[2]/span[1]/span/div/img')
-    click_button('//*[@id="menu-list"]/div/ul/li[1]/a')
-
-    parsed_manga = [parse_catalogue(x) for x in range(1,7)]
-    driver.close()
-    return parsed_manga
-
-if __name__ == '__main__':
-    main()

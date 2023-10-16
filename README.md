@@ -1,13 +1,11 @@
 # Newmanga migration tool
 
-Говнокод позволяющий сделать почти полностью автоматический переход с решки на ньюмангу за две минуты.
+Говнокод позволяющий сделать почти полностью автоматический переход с решки на ньюмангу за минуту. 
+Да, я ускорил алгоритм в 4 раза перейдя на асинхронные запросы.
 
 ## Setup
 
 Installing py libraries
 ```
-pip install requests
-pip install keyboard
-pip install selenium
-pip install webdriver_manager
+pip install -r requirements.txt
 ```
