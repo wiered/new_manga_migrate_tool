@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait 
+from selenium.webdriver.support import expected_conditions as EC 
 from webdriver_manager.chrome import ChromeDriverManager
 import keyboard
 
@@ -80,8 +82,11 @@ class ReMangaParser:
             print("No phone app ad")
         self.click_button('//*[@id="__next"]/div/div/button') # click ok to cookies
         self.click_button('//html/body/div/header/nav/div[3]/button') # click blue login button
-        print("Зайдите в свой аккаунт на сайте, после чего нажмите Enter в консоли...")
-        keyboard.wait('Enter')
+        print("Зайдите в свой аккаунт на сайте.")
+        login_button = driver.find_element(By.XPATH, value = '//html/body/div/header/nav/div[3]/button')
+        WebDriverWait(driver, 120).until( 
+            EC.staleness_of(login_button)
+        )
 
         self.click_button('//html/body/div/header/nav/div[3]/div[2]') # click account logo
         self.click_button('//html/body/div[2]/div/div/ul/li[1]/a') # click name
