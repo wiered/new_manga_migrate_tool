@@ -18,7 +18,7 @@ bookmarks = {
     6: "Не интересно"
 }
 
-__version__ = "v1.4.1"
+__version__ = "v1.4.3"
 
 def get_login_payload():
     login = input("Input newmanga login: ")
