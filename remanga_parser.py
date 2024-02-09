@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC 
 from tqdm import tqdm
 from webdriver_manager.chrome import ChromeDriverManager
-import keyboard
+
 
 import time
 import logging

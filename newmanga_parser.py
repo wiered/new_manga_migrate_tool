@@ -1,9 +1,7 @@
-import asyncio
 import json
 import time
 
 import httpx
-import requests
 from tqdm import tqdm
 
 class NewMangaParser():

@@ -6,8 +6,8 @@ from sys import exit
 import requests, json
 from tqdm import tqdm
 
-from remanga import ReMangaParser
-from newmanga import NewMangaParser
+from remanga_parser import ReMangaParser
+from newmanga_parser import NewMangaParser
 
 bookmarks = {
     1: "Читаю",
